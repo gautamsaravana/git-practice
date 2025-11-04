@@ -10,7 +10,7 @@ const UserLayout = () => {
       <UserNavbar />
 
       {/* Main content area */}
-      <main className="flex-grow-1 py-4" style={{ marginTop: '5px' }}>
+      <main className="flex-grow-1 py-0" style={{ marginTop: '0px' }}>
         <Outlet />
       </main>
 
