@@ -178,7 +178,7 @@ const MovieFormWithCrewCast = () => {
           </Button>
         </div>
 
-        <Card style={{ maxWidth: "800px", margin: "0 auto" }} className="p-4 shadow-lg">
+        <Card style={{ maxWidth: "800px", margin: "0 auto" }} className="p-4 shadow-lg mb-3">
           <Form onSubmit={handleSubmit}>
             <h3 className="text-center fw-bold mb-4 text-primary">{movieId ? "Update Movie" : "Add Movie"}</h3>
 
