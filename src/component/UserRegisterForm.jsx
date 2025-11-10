@@ -1,9 +1,10 @@
 import { useState } from 'react';
-import { Button, Form } from 'react-bootstrap';
+import { Button, Form, InputGroup } from 'react-bootstrap';
 import { useNavigate, useParams, Link } from 'react-router-dom';
 import UserService from '../service/UserService';
 import Swal from 'sweetalert2';
 import 'bootstrap/dist/css/bootstrap.css';
+import { EyeFill, EyeSlashFill } from 'react-bootstrap-icons';
 
 export const UserRegisterForm = () => {
   const navigate = useNavigate();
@@ -23,12 +24,14 @@ export const UserRegisterForm = () => {
     password: ""
   });
 
+  const [showPassword, setShowPassword] = useState(false);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     const updatedUserData = { ...userData, [name]: value };
     const updatedErrors = { ...errMsgs };
 
-    if (name === 'user_name') {
+    if (name === 'userName') {
       updatedErrors.userName = !/^[a-zA-Z\s]+$/.test(value)
         ? "Name should only contain letters"
         : "";
@@ -69,7 +72,6 @@ export const UserRegisterForm = () => {
       }
 
       const response = await UserService.registerUser(user);
-      console.log(response);
       if (response.status === 201) {
         Swal.fire({
           icon: 'success',
@@ -156,17 +158,34 @@ export const UserRegisterForm = () => {
             {errMsgs.phone && <div className="text-danger mt-1">{errMsgs.phone}</div>}
           </Form.Group>
 
+          {/* ✅ Password field with Eye toggle */}
           <Form.Group className="mb-4">
             <Form.Label style={styles.label}>Password</Form.Label>
-            <Form.Control
-              type="password"
-              name="password"
-              placeholder="Enter password"
-              value={userData.password}
-              onChange={handleChange}
-              required
-              style={styles.input}
-            />
+            <InputGroup>
+              <Form.Control
+                type={showPassword ? "text" : "password"}
+                name="password"
+                placeholder="Enter password"
+                value={userData.password}
+                onChange={handleChange}
+                required
+                style={styles.input}
+              />
+              <Button
+                variant="outline-secondary"
+                onClick={() => setShowPassword(!showPassword)}
+                style={{
+                  backgroundColor: "white",
+                  borderLeft: "none"
+                }}
+              >
+                {showPassword ? (
+                  <EyeSlashFill color="gray" />
+                ) : (
+                  <EyeFill color="gray" />
+                )}
+              </Button>
+            </InputGroup>
             {errMsgs.password && <div className="text-danger mt-1">{errMsgs.password}</div>}
           </Form.Group>
 
