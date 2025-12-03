@@ -153,7 +153,7 @@ export const UserLogin = () => {
             <Form.Control
               type="email"
               name="email"
-              placeholder="Enter your email"
+              placeholder="Enter Your Email"
               value={loginDetails.email}
               onChange={handleChange}
               required
@@ -170,7 +170,7 @@ export const UserLogin = () => {
               <Form.Control
                 type={showPassword ? "text" : "password"}
                 name="password"
-                placeholder="Enter password"
+                placeholder="Enter Password"
                 value={loginDetails.password}
                 onChange={handleChange}
                 required
