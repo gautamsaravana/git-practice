@@ -1,0 +1,39 @@
+pipelines:
+  branches:
+    main:
+      - step:
+          name: build and pushing image with version
+          services:
+            - docker
+          script:
+            - echo "Running pipeline for branch $BITBUCKET_BRANCH"
+            - echo "$GCLOUD_KEY" | base64 -d > /tmp/key.json
+
+            - gcloud auth activate-service-account --key-file=/tmp/key.json
+            - gcloud config set project pure-lodge-478906-k5
+            - echo "Verifying authentication with artifacts registry"
+
+            - gcloud auth list
+
+            - |
+              if ! gcloud artifacts repositories list \
+                --project=pure-lodge-478906-k5 \
+                --location=us-central1; then
+                echo "Artifact Registry access failed"
+                exit 1
+              fi
+
+            - gcloud auth configure-docker us-central1-docker.pkg.dev --quiet
+
+            - BASE_VERSION="0.0"
+            - VERSION="${BASE_VERSION}.${BITBUCKET_BUILD_NUMBER}"
+
+            - echo "node_modules" > .dockerignore
+            - echo ".git" >> .dockerignore
+            - echo "build" >> .dockerignore
+
+            - export IMAGE_NAME="us-central1-docker.pkg.dev/pure-lodge-478906-k5/cinema-repo/cinema_frontend"
+            - export IMAGE_TAG="${IMAGE_NAME}:${VERSION}"
+
+            - docker build -t $IMAGE_TAG --build-arg NODE_ENV=production .
+            - docker push $IMAGE_TAG
