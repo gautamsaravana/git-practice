@@ -3,6 +3,7 @@ pipelines:
     main:
       - step:
           name: build and pushing image with version
+          image: google/cloud-sdk:latest
           services:
             - docker
           script:
